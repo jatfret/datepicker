@@ -1,0 +1,17 @@
+$prefixClass: datepicker;
+$borderColor: #e9e9e9;
+$disableColor: #b9b9b9;
+$ableColor: #666;
+$contentColor: #333;
+$selectedColor: #71b4ff;
+$rangeColor: #edf4ff;
+$blueColor: #1382ff;
+$greyColor: #f9f9f9;
+
+.#{$prefixClass},
+.#{$prefixClass}-range {
+  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
+}

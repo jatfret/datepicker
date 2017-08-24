@@ -1,0 +1,41 @@
+.#{$prefixClass}-year-panel {
+  .#{$prefixClass}-column-year-cell {
+    padding: 10px 0;
+  }
+  .#{$prefixClass}-column-year-cell-0 {
+    text-align: left;
+  }
+  .#{$prefixClass}-column-year-cell-1 {
+    text-align: center;
+  }
+  .#{$prefixClass}-column-year-cell-2 {
+    text-align: right;
+  }
+  .#{$prefixClass}-year {
+    display: inline-block;
+    width: 60px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    &:hover {
+      background: $rangeColor;
+      border-radius: 4px;
+    }
+  }
+  .#{$prefixClass}-selected-cell {
+    .#{$prefixClass}-year {
+      background: $selectedColor;
+      color: #fff;
+      border-radius: 4px;
+    }
+  }
+  .#{$prefixClass}-disabled-cell {
+    .#{$prefixClass}-year {
+      background: #fff;
+      color: $disableColor;
+      cursor: not-allowed;
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.#{$prefixClass}-footer {
+  a {
+    display: inline-block;
+    width: 80px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .#{$prefixClass}-cancel-btn {
+    margin-right: 10px;
+    border: 1px solid $borderColor;
+    &:hover {
+      background: $greyColor;
+    }
+  }
+  .#{$prefixClass}-confirm-btn {
+    border: 1px solid $borderColor;
+    background: $blueColor;
+    color: #fff;
+  }
+}
