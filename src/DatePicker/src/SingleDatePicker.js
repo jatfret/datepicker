@@ -1,24 +1,17 @@
 import React from 'react';
+import moment from 'moment';
 import DatePickerApart from './components/DatePickerApart';
 import DatePickerFooter from './components/DatePickerFooter';
-import DateRangePicker from "./DateRangePicker";
 import '../scss/index.scss';
-import { getNow } from './utilTools';
 import { DefaultFormat } from './constants';
 
-
- const prefixCls = "datepicker";
-
-function noop(){
-
-}
-
-export class DatePicker extends React.Component {
+export class SingleDatePicker extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      prefixCls: prefixCls,
-      value: props.value || props.defaultValue || getNow(),
+      wrapperCls: props.wrapperCls,
+      value: props.value || props.defaultValue || moment(),
+      selectedValue: props.defaultValue || null,
       firstSelectedValue: null,
       disableDate: props.disableDate || null,
       mode: props.isMonth ? 'month' : 'date',
@@ -43,7 +36,6 @@ export class DatePicker extends React.Component {
   }
   onConfirm(){
     const { selectedValue } = this.state;
-    // console.log(this.state)
     this.props.onConfirm(selectedValue);
   }
   onSelect(value){
@@ -81,13 +73,11 @@ export class DatePicker extends React.Component {
   render(){
     const { props, state } = this;
     const { format, sectionType, disabledDate, pickerStyle } = props;
-    const {
-      prefixCls, value, selectedValue, mode, isMonth, isRange
-    } = state;
+    const { wrapperCls, value, selectedValue, mode, isMonth, isRange } = state;
     return (
-      <div className={`${prefixCls}`} style={pickerStyle}>
+      <div className={`${wrapperCls}`} style={pickerStyle}>
         <DatePickerApart
-          prefixCls={prefixCls}
+          wrapperCls={wrapperCls}
           value={value}
           selectedValue={selectedValue}
           disabledDate={disabledDate}
@@ -103,7 +93,7 @@ export class DatePicker extends React.Component {
           onPanelChange={this.onPanelChange}
         />
         <DatePickerFooter
-          prefixCls={prefixCls}
+          wrapperCls={wrapperCls}
           onCancel={this.onCancel}
           onConfirm={this.onConfirm}
         />
@@ -112,13 +102,13 @@ export class DatePicker extends React.Component {
   }
 }
 
-DatePicker.defaultProps = {
+SingleDatePicker.defaultProps = {
   format: DefaultFormat,
-  onPanelChange: noop,
-  onConfirm: noop,
-  onCancel: noop,
-  onSelect: noop,
-  onChange: noop
+  onPanelChange(){},
+  onConfirm(){},
+  onCancel(){},
+  onSelect(){},
+  onChange(){}
 }
 
-export default DatePicker
+export default SingleDatePicker

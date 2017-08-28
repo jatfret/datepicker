@@ -3,20 +3,18 @@ import DatePickerHeader from './DatePickerHeader';
 import DatePickerTable from './DatePickerTable';
 
 export default class DatePickerApart extends React.Component {
-  constructor(props){
-    super(props);
-  }
+
   render(){
     const props = this.props;
     const {
-      prefixCls, value, selectedValue,disabledDate, mode, isMonth,
+      wrapperCls, value, selectedValue,disabledDate, mode, isMonth,
       sectionType, isRange, setValue, enablePrev, enableNext, onSelect, onValueChange,
       onPanelChange
      } = props;
     return (
-      <div className={`${prefixCls}-panel`}>
+      <div className={`${wrapperCls}-panel`}>
         <DatePickerHeader
-          prefixCls={prefixCls}
+          wrapperCls={wrapperCls}
           value={value}
           mode={mode}
           isMonth={isMonth}
@@ -29,7 +27,7 @@ export default class DatePickerApart extends React.Component {
           onPanelChange={onPanelChange}
         />
         <DatePickerTable
-          prefixCls={prefixCls}
+          wrapperCls={wrapperCls}
           value={value}
           selectedValue={selectedValue}
           disabledDate={disabledDate}

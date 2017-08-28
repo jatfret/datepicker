@@ -13,16 +13,16 @@ export default class YearHeader extends React.Component {
   }
   render(){
     const { props } = this;
-    const { prefixCls, value, enablePrev, enableNext, } = this.props;
+    const { wrapperCls, value, enablePrev, enableNext, } = this.props;
     const currentYear = value.year();
     const startYear = parseInt(currentYear / 10, 10) * 10;
     const endYear = startYear + 9;
     const previousYear = startYear - 1;
     const selectedEls =  `${startYear}-${endYear}`;
     return (
-      <div className={`${prefixCls}-year-header-panel`}>
+      <div className={`${wrapperCls}-year-header-panel`}>
         <DatePickerAdjacentSelect
-          prefixCls={prefixCls}
+          wrapperCls={wrapperCls}
           selecteEls={selectedEls}
           enablePrev={enablePrev}
           enableNext={enableNext}

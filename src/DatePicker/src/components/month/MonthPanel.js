@@ -1,112 +1,117 @@
 import React from "react";
+import moment from 'moment';
 import { MonthConstants } from '../../constants';
-import { getNow, getMonthName, isSameWeek } from '../../utilTools';
+import { getMonthName } from '../../utilTools';
 
 export default class MonthPanel extends React.Component {
   constructor(props){
     super(props);
-    this.chooseMonth = this.chooseMonth.bind(this);
-    // this.setAndSelectValue = this.setAndSelectValue.bind(this);
+    this.selectMonth = this.selectMonth.bind(this);
   }
-  getMonths() {
+  getFullMonths() {
     const value = this.props.value;
     const current = value.clone();
-    const months = [];
+    const fullMonths = [];
     let index = 0;
-    for (let rowIndex = 0; rowIndex < MonthConstants.MONTH_ROW_COUNT; rowIndex++) {
-      months[rowIndex] = [];
-      for (let colIndex = 0; colIndex < MonthConstants.MONTH_COL_COUNT; colIndex++) {
-        current.month(index);
-        const content = getMonthName(current);
-        months[rowIndex][colIndex] = {
-          value: index,
-          content,
+    for (let xIndex = 0; xIndex < MonthConstants.MONTH_ROW_COUNT; xIndex++) {
+      fullMonths[xIndex] = [];
+      for (let yIndex = 0; yIndex < MonthConstants.MONTH_COL_COUNT; yIndex++) {
+        const monthItemDate = current.clone().month(index);
+        const monthItemName = getMonthName(monthItemDate);
+        fullMonths[xIndex][yIndex] = {
+          index,
+          monthName: monthItemName,
+          date: monthItemDate,
         };
         index++;
       }
     }
-    return months;
+    return fullMonths;
   }
-  chooseMonth(month) {
-    const next = this.props.value.clone();
-    next.month(month);
-    !this.props.isMonth ? this.props.onValueChange(next) : this.props.onSelect(next);
+  selectMonth(month) {
+    const selected = month.clone();
+    !this.props.isMonth ? this.props.onValueChange(selected) : this.props.onSelect(selected);
     !this.props.isMonth && this.props.onPanelChange('date');
   }
   render(){
     const { props } = this;
-    const { prefixCls, value, selectedValue, disabledDate, isMonth} = props;
-    const cellClass = `${prefixCls}-column-month-cell`;
-    const monthClass = `${prefixCls}-month`;
-    const rangeClass = `${prefixCls}-range-cell`;
-    const nowClass = `${prefixCls}-now-cell`;
-    const disabledClass = `${prefixCls}-disabled-cell`;
-    const selectedClass = `${prefixCls}-selected-cell`;
-    const today = getNow();
-    const currentMonth = value.month();
-    const months = this.getMonths();
-    const monthEls = months.map((month, index) => {
-      const tdContent = month.map((monthData, i) => {
-        const monthDate = value.clone().month(monthData.value);
+    const { wrapperCls, value, selectedValue, disabledDate, isMonth, sectionType} = props;
+    const cellClass = `${wrapperCls}-column-month-cell`;
+    const monthClass = `${wrapperCls}-month`;
+    const rangeClass = `${wrapperCls}-range-cell`;
+    const nowClass = `${wrapperCls}-now-cell`;
+    const disabledClass = `${wrapperCls}-disabled-cell`;
+    const selectedClass = `${wrapperCls}-selected-cell`;
+    const today = moment();
+    const fullMonths = this.getFullMonths();
+    const monthCells = fullMonths.map((monthRow, index) => {
+      const tdContent = monthRow.map((month, i) => {
         let disabled = false;
         let selected = false;
         let cls = `${cellClass} ${cellClass}-${i}`;
-        let monthEl;
 
         if(disabledDate) {
-          // debugger;
-          if(disabledDate(monthDate, value)){
+          if(disabledDate(month.date, value)){
             disabled = true;
             cls += ` ${disabledClass}`;
           }
         }
-        if(selectedValue && Array.isArray(selectedValue) && isMonth){
-          const rangeValue = selectedValue;
-          const startValue = rangeValue[0];
-          const endValue = rangeValue[1];
-          if (startValue) {
-            if (isSameWeek(monthDate, startValue)) {
-              selected = true;
+        if(selectedValue){
+          if(Array.isArray(selectedValue)){
+            const rangeValue = selectedValue.slice(0);
+            const startValue = rangeValue[0];
+            const endValue = rangeValue[1];
+            if(startValue) {
+              if(month.date.isSame(startValue, 'month')) {
+                selected = true;
+              }
             }
-          }
-          if (startValue && endValue) {
-            if (isSameWeek(monthDate, startValue) ) {
-              selected = true;
-              cls += ` ${rangeClass}`;
-            }else if(isSameWeek(monthDate, endValue)){
-              selected = true;
-            }else if (monthDate.isAfter(startValue, 'month') &&
-              monthDate.isBefore(endValue, 'month')) {
-              cls += ` ${rangeClass}`;
+            if(endValue){
+              if(month.date.isSame(endValue, 'month')) {
+                selected = true;
+              }
             }
+            if(sectionType === 'month'){
+              if(endValue){
+                if(month.date.isSame(startValue, 'month') ||
+                  month.date.isAfter(startValue, 'month') &&
+                  month.date.isBefore(endValue, 'month')
+                ){
+                  cls += ` ${rangeClass}`;
+                }
+              }
+            }
+          }else if(month.date.isSame(selectedValue, 'month')){
+            selected = true;
           }
-        }else if(monthData.value === currentMonth){
-          selected = true;
         }
         if(selected) {
           cls += ` ${selectedClass}`;
         }
 
-        if( today.year() === value.year() && monthData.value === today.month()){
+        if( today.year() === value.year() && month.value === today.month()){
           cls += ` ${nowClass}`;
         }
 
-        monthEl = <div className={`${prefixCls}-month-wrapper`}>
-                    <div
-                      className={`${monthClass}`}
-                      onClick={()=>{disabled ? undefined : this.chooseMonth(monthData.value)}}
-                    >
-                      {monthData.content}
-                    </div>
-                  </div>
-        return (<td key={monthData.value} className={cls}>{monthEl}</td>)
+        return (
+          <td key={month.index} className={cls}>
+            <div className={`${wrapperCls}-month-wrapper`}>
+              <div
+                className={`${monthClass}`}
+                onClick={()=>{disabled ? undefined : this.selectMonth(month.date)}}
+              >
+                {month.monthName}
+              </div>
+            </div>
+          </td>
+        )
       })
       return (<tr role="row" key={index}>{tdContent}</tr>)
     });
     return (
-      <table className={`${prefixCls}-month-panel`}>
+      <table className={`${wrapperCls}-month-panel`}>
         <tbody>
-          {monthEls}
+          {monthCells}
         </tbody>
       </table>
     )

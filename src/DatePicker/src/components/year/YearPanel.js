@@ -1,7 +1,6 @@
-import React from "react";
+import React from 'react';
+import moment from 'moment';
 import { YearConstants } from '../../constants';
-import { getNow, isSameDay } from '../../utilTools';
-
 
 export default class YearPanel extends React.Component {
   constructor(props){
@@ -11,34 +10,33 @@ export default class YearPanel extends React.Component {
     }
   }
   componentWillReceiveProps(nextProps){
-    if(!isSameDay(nextProps.value, this.props.value)){
+    if(!nextProps.value.isSame(this.props.value, 'day')){
       this.setState({value: nextProps.value})
     }
   }
-  getYears(){
+  getFullYears(){
    const value = this.state.value;
-   const currentYear = value.year();
-   const startYear = parseInt(currentYear / 10, 10) * 10;
-   const previousYear = startYear - 1;
-   const years = [];
+   const current = value.clone();
+   const currentYear = current.year();
+   const decadeStartYear = parseInt(currentYear / 10, 10) * 10;
+   const firstYear = decadeStartYear - 1;
+   const fullYears = [];
    let index = 0;
-   for (let rowIndex = 0; rowIndex < YearConstants.YEAR_ROW_COUNT; rowIndex++) {
-     years[rowIndex] = [];
-     for (let colIndex = 0; colIndex < YearConstants.YEAR_COL_COUNT; colIndex++) {
-       const year = previousYear + index;
-       const content = String(year);
-       years[rowIndex][colIndex] = {
-         content,
-         year,
+   for (let xIndex = 0; xIndex < YearConstants.YEAR_ROW_COUNT; xIndex++) {
+     fullYears[xIndex] = [];
+     for (let yIndex = 0; yIndex < YearConstants.YEAR_COL_COUNT; yIndex++) {
+       const year = firstYear + index;
+       fullYears[xIndex][yIndex] = {
+         yearName:year,
+         date: current.clone().year(year)
        };
        index++;
      }
    }
-   return years;
+   return fullYears;
   }
-  chooseYear(year) {
-    const value = this.state.value.clone();
-    value.year(year);
+  selectYear(year) {
+    const value = year.clone();
     value.month(this.state.value.month());
     this.props.onValueChange(value);
     const nextPanel = this.props.isMonth ? 'month' : 'date';
@@ -46,51 +44,52 @@ export default class YearPanel extends React.Component {
   }
   render(){
     const { props } = this;
-    const { prefixCls, value, disabledDate } = props;
-    const cellClass = `${prefixCls}-column-year-cell`;
-    const yearClass = `${prefixCls}-year`;
-    const rangeClass = `${prefixCls}-range-cell`;
-    const nowClass = `${prefixCls}-now-cell`;
-    const disabledClass = `${prefixCls}-disabled-cell`;
-    const selectedClass = `${prefixCls}-selected-cell`;
-    const today = getNow();
+    const { wrapperCls, value, disabledDate } = props;
+    const cellClass = `${wrapperCls}-column-year-cell`;
+    const yearClass = `${wrapperCls}-year`;
+    const rangeClass = `${wrapperCls}-range-cell`;
+    const nowClass = `${wrapperCls}-now-cell`;
+    const disabledClass = `${wrapperCls}-disabled-cell`;
+    const selectedClass = `${wrapperCls}-selected-cell`;
+    const today = moment();
     const currentYear = value.year();
-    const years = this.getYears();
-    const yearEls = years.map((year, index) => {
-      const tdContent = year.map((yearData, i) => {
-        const yearTime =value.clone().year(yearData.year);
+    const fullYears = this.getFullYears();
+    const yearCells = fullYears.map((yearRow, index) => {
+      const tdContent = yearRow.map((year, i) => {
         let disabled = false;
         let selected = false;
         let cls = `${cellClass} ${cellClass}-${i}`;
-        let yearEl;
 
-        if(disabledDate && disabledDate(yearTime)) {
+        if(disabledDate && disabledDate(year.date)) {
           disabled = true;
           cls += ` ${disabledClass}`;
         }
 
-        if(yearData.year === currentYear){
+        if(year.yearName === currentYear){
           cls += ` ${selectedClass}`;
         }
 
-        if( today.year() === value.year() && yearData.year === today.year()){
+        if( today.year() === value.year() && year.yearName === today.year()){
           cls += ` ${nowClass}`;
         }
 
-        yearEl = <div
-                    className={`${yearClass}`}
-                    onClick={disabled ? undefined : this.chooseYear.bind(this, yearData.year)}
-                  >
-                    {yearData.content}
-                  </div>
-        return (<td key={yearData.year} className={cls}>{yearEl}</td>)
+        return (
+          <td key={year.yearName} className={cls}>
+            <div
+              className={`${yearClass}`}
+              onClick={disabled ? undefined : this.selectYear.bind(this, year.date)}
+            >
+              {year.yearName}
+            </div>
+          </td>
+        )
       })
       return (<tr role="row" key={index}>{tdContent}</tr>)
     });
     return (
-      <table className={`${prefixCls}-year-panel`}>
+      <table className={`${wrapperCls}-year-panel`}>
         <tbody>
-          {yearEls}
+          {yearCells}
         </tbody>
       </table>
     )

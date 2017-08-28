@@ -13,12 +13,12 @@ export default class MonthHeader extends React.Component {
   }
   render(){
     const { props } = this;
-    const { prefixCls, value, enablePrev, enableNext, onPanelChange } = this.props;
+    const { wrapperCls, value, enablePrev, enableNext, onPanelChange } = this.props;
     const selectedYearEls = value.get('year');
     return (
-      <div className={`${prefixCls}-month-header-panel`}>
+      <div className={`${wrapperCls}-month-header-panel`}>
         <DatePickerAdjacentSelect
-          prefixCls={prefixCls}
+          wrapperCls={wrapperCls}
           selecteType={"year"}
           selecteEls={selectedYearEls}
           enablePrev={enablePrev}

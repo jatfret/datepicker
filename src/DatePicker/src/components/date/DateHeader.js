@@ -1,5 +1,6 @@
 import React from 'react';
 import DatePickerAdjacentSelect from '../DatePickerAdjacentSelect';
+import { getMonthName } from '../../utilTools';
 
 export default class DateHeader extends React.Component {
   constructor(props){
@@ -19,14 +20,14 @@ export default class DateHeader extends React.Component {
   }
   render(){
     const { props } = this;
-    const { prefixCls, value, enableNext, enablePrev, onPanelChange } = this.props;
+    const { wrapperCls, value, enableNext, enablePrev, onPanelChange } = this.props;
     const selectedYearEls = value.get('year');
-    const selectedMonthEls = value.localeData().monthsShort(value);
+    const selectedMonthEls = getMonthName(value);
     return (
-      <div className={`${prefixCls}-date-header-panel`}>
-        <div className={`${prefixCls}-col2`}>
+      <div className={`${wrapperCls}-date-header-panel`}>
+        <div className={`${wrapperCls}-col2`}>
           <DatePickerAdjacentSelect
-            prefixCls={prefixCls}
+            wrapperCls={wrapperCls}
             selecteType={"year"}
             selecteEls={selectedYearEls}
             enablePrev={enablePrev}
@@ -35,9 +36,9 @@ export default class DateHeader extends React.Component {
             onPanelChange={onPanelChange}
           />
         </div>
-        <div className={`${prefixCls}-col2`}>
+        <div className={`${wrapperCls}-col2`}>
           <DatePickerAdjacentSelect
-          prefixCls={prefixCls}
+          wrapperCls={wrapperCls}
           selecteType={"month"}
           selecteEls={selectedMonthEls}
           enablePrev={enablePrev}

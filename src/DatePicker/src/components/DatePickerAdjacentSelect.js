@@ -1,29 +1,26 @@
 import React from 'react';
 
 export default class DatePickerAdjacentSelect extends React.Component {
-  constructor(props){
-    super(props);
-  }
   render(){
     const {
-      prefixCls, value, selecteType,
+      wrapperCls, value, selecteType,
       selecteEls, adjacentChange, enablePrev, enableNext
     } = this.props;
     return (
-      <div className={`${prefixCls}-adjacent-selector`}>
+      <div className={`${wrapperCls}-adjacent-selector`}>
         <a
           role="button"
-          className={`${prefixCls}-prev-btn ${prefixCls}-${enablePrev ? '' : 'disabled'}-btn`}
+          className={`${wrapperCls}-prev-btn ${wrapperCls}-${enablePrev ? '' : 'disabled'}-btn`}
           onClick={()=>{enablePrev && adjacentChange(-1)}}
         />
         <a
           role="button"
-          className={`${prefixCls}-month-year-value`}
+          className={`${wrapperCls}-month-year-value`}
           onClick={selecteType ? this.props.onPanelChange.bind(null, selecteType) : undefined}
         >{selecteEls}</a>
         <a
           role="button"
-          className={`${prefixCls}-next-btn ${prefixCls}-${enableNext ? '' : 'disabled'}-btn`}
+          className={`${wrapperCls}-next-btn ${wrapperCls}-${enableNext ? '' : 'disabled'}-btn`}
           onClick={() => { enableNext && adjacentChange(1)}}
         />
       </div>

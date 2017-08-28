@@ -3,14 +3,11 @@ import DateTHead from './DateTHead';
 import DateTBody from './DateTBody';
 
 export default class DatePanel extends React.Component {
-  constructor(props){
-    super(props);
-  }
   render(){
     const props = this.props;
-    const { prefixCls } = props;
+    const { wrapperCls } = props;
     return (
-      <table className={`${prefixCls}-date-panel`}>
+      <table className={`${wrapperCls}-date-panel`}>
         <DateTHead {...props}/>
         <DateTBody {...props}/>
       </table>

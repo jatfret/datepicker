@@ -4,9 +4,6 @@ import MonthPanel from './month/MonthPanel';
 import YearPanel from './year/YearPanel';
 
 export default class DatePickerTable extends React.Component {
-  constructor(props){
-    super(props);
-  }
   getTablePanel(){
     const props = this.props;
     let { mode } = props;
@@ -25,9 +22,9 @@ export default class DatePickerTable extends React.Component {
   }
   render(){
     const props = this.props;
-    const { prefixCls, mode } = props;
+    const { wrapperCls, mode } = props;
     return (
-      <div className={`${prefixCls}-body`}>
+      <div className={`${wrapperCls}-body`}>
         {this.getTablePanel(props)}
       </div>
     )

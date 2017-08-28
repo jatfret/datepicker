@@ -4,9 +4,6 @@ import MonthHeader from './month/MonthHeader';
 import YearHeader from './year/YearHeader';
 
 export default class DatePickerHeader extends React.Component {
-  constructor(props){
-    super(props);
-  }
   getHeaderPanel(){
     const props = this.props;
     let { mode } = props;
@@ -25,9 +22,9 @@ export default class DatePickerHeader extends React.Component {
   }
   render(){
     let { props, state } = this;
-    let { prefixCls } = props;
+    let { wrapperCls } = props;
     return (
-      <div className={`${prefixCls}-header`}>
+      <div className={`${wrapperCls}-header`}>
         {this.getHeaderPanel()}
       </div>
     )

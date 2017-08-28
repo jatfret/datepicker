@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import DatePicker from './DatePicker';
-import DateRangePicker from './DateRangePicker';
-const prefixCls = "datepicker";
-function noop(){}
+import SingleDatePicker from './SingleDatePicker';
+import RangeDatePicker from './RangeDatePicker';
+const wrapperCls = "datepicker";
+
 moment.locale('zh-cn');
 
 class DatePickerComponent extends React.Component {
@@ -43,13 +43,13 @@ class DatePickerComponent extends React.Component {
 
     if (!this.node) {
       this.node = document.createElement('div');
-      this.node.classList.add(`${prefixCls}-popup`)
+      this.node.classList.add(`${wrapperCls}-popup`)
       document.body.appendChild(this.node);
     }
 
-    const instance = props.isRange ? <DateRangePicker /> : <DatePicker />;
+    const instance = props.isRange ? <RangeDatePicker /> : <SingleDatePicker />;
     const newProps = Object.assign({}, props, {
-      prefixCls: prefixCls,
+      wrapperCls: wrapperCls,
       pickerStyle: this.getPickerStyle(),
       defaultValue: state.prevValue,
       onSelect: this.onSelect,
@@ -78,10 +78,13 @@ class DatePickerComponent extends React.Component {
     this.props.onChange(value);
   }
   onConfirm(value){
-    const prevValue = this.state.prevValue;
-    const validValue = value || prevValue;
-    this.setState({value: validValue, prevValue: validValue});
-    this.props.onConfirm(validValue);
+    console.log(value)
+    if(value){
+      const prevValue = this.state.prevValue;
+      const validValue = value || prevValue;
+      this.setState({value: validValue, prevValue: validValue});
+      this.props.onConfirm(validValue);
+    }
     this.removeDatePickerComponent();
   }
   onCancel(value){
@@ -161,10 +164,10 @@ class DatePickerComponent extends React.Component {
   }
 }
 DatePickerComponent.defaultProps = {
-  onChange: noop,
-  onSelect: noop,
-  onConfirm: noop,
-  onCancel: noop,
+  onChange(){},
+  onSelect(){},
+  onConfirm(){},
+  onCancel(){},
   format: 'YYYY.MM.DD'
 }
 export default DatePickerComponent;

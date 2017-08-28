@@ -3,74 +3,36 @@ import moment from 'moment';
 import DatePickerApart from './components/DatePickerApart';
 import DatePickerFooter from './components/DatePickerFooter';
 
-function noop(){
-}
-
-function isEmptyArray(arr) {
-  return Array.isArray(arr) && (arr.length === 0 || arr.every(i => !i));
-}
-
-function isArraysEqual(a, b) {
-  if (a === b) {return true;}
-  if (a === null || typeof a === 'undefined' || b === null || typeof b === 'undefined') {
-    return false;
-  }
-  if (a.length !== b.length) { return false;}
-
-  for (let i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) { return false; }
-  }
-  return true;
-}
-
-function getValueFromSelectedValue(selectedValue) {
-  const [start, end] = selectedValue;
-  const newEnd = end && end.isSame(start, 'month') ? end.clone().add(1, 'month') : end;
-  return [start, newEnd];
-}
-
-function normalizeAnchor(props, init) {
-  const selectedValue = props.selectedValue || init && props.defaultSelectedValue;
-  const value = props.value || init && props.defaultValue;
-  const normalizedValue = value ?
-          getValueFromSelectedValue(value) :
-          getValueFromSelectedValue(selectedValue);
-  return !isEmptyArray(normalizedValue) ?
-    normalizedValue : init && [moment(), moment().add(1, 'months')];
-}
-
-export default class DateRangePicker extends React.Component {
+export default class RangeDatePicker extends React.Component {
   constructor(props){
     super(props);
-    const selectedValue = props.selectedValue || props.defaultSelectedValue;
     this.state = {
-      selectedValue: props.defaultValue || [],
+      selectedValue: props.defaultValue || null,
       prevSelectedValue: [],
       firstSelectedValue: null,
-      value: normalizeAnchor(props, 1),
+      value: props.value,
       mode: props.isMonth ? ['month', 'month'] : props.mode,
     }
     this.onStartValueChange = this.onStartValueChange.bind(this);
     this.onEndValueChange = this.onEndValueChange.bind(this);
     this.onStartPanelChange = this.onStartPanelChange.bind(this);
     this.onEndPanelChange = this.onEndPanelChange.bind(this);
-    this.compare = this.compare.bind(this);
     this.onSelect = this.onSelect.bind(this);
     this.onConfirm = this.onConfirm.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.fireValueChange = this.fireValueChange.bind(this);
-    this.fireSelectValueChange = this.fireSelectValueChange.bind(this);
+    this.setValueChange = this.setValueChange.bind(this);
+    this.onSelectValueChange = this.onSelectValueChange.bind(this);
   }
   onStartValueChange(leftValue) {
     const value = [...this.state.value];
     value[0] = leftValue;
-    return this.fireValueChange(value);
+    return this.setValueChange(value);
   }
   onEndValueChange(rightValue) {
     const value = [...this.state.value];
     value[1] = rightValue;
-    return this.fireValueChange(value);
+    return this.setValueChange(value);
   }
   onStartPanelChange(mode) {
     const { props, state } = this;
@@ -86,33 +48,26 @@ export default class DateRangePicker extends React.Component {
       mode: newMode,
     });
   }
-  compare(v1, v2) {
-    if (this.props.timePicker) {
-      return v1.diff(v2);
-    }
-    return v1.diff(v2, 'days');
-  }
   onSelect(value) {
-    const { type } = this.props;
     const { selectedValue, prevSelectedValue, firstSelectedValue } = this.state;
     let nextSelectedValue;
     if (!firstSelectedValue) {
       nextSelectedValue = [value];
-    } else if (this.compare(firstSelectedValue, value) < 0) {
+    } else if (firstSelectedValue.diff(value, 'days') < 0) {
       nextSelectedValue = [firstSelectedValue, value];
     } else {
       nextSelectedValue = [value, firstSelectedValue];
     }
-    this.fireSelectValueChange(nextSelectedValue);
+    this.onSelectValueChange(nextSelectedValue);
   }
-  fireValueChange(value) {
+  setValueChange(value) {
     const props = this.props;
       this.setState({
         value,
       });
     props.onValueChange(value);
   }
-  fireSelectValueChange(selectedValue) {
+  onSelectValueChange(selectedValue) {
     const { prevSelectedValue } = this.state;
 
     if (!('selectedValue' in this.props)) {
@@ -143,7 +98,6 @@ export default class DateRangePicker extends React.Component {
   }
   onConfirm(){
     const { selectedValue } = this.state;
-    console.log(this.state)
     this.props.onConfirm(selectedValue);
   }
   onCancel(){
@@ -155,7 +109,7 @@ export default class DateRangePicker extends React.Component {
   }
   render(){
     const { state, props } = this;
-    const { prefixCls, isMonth, sectionType, onSelect, disabledDate, pickerStyle } = props;
+    const { wrapperCls, isMonth, sectionType, onSelect, disabledDate, pickerStyle } = props;
     const {
       mode, selectedValue, prevSelectedValue,
       firstSelectedValue
@@ -171,11 +125,11 @@ export default class DateRangePicker extends React.Component {
     }
 
     return(
-      <div className={`${prefixCls}-range`} style={pickerStyle}>
-        <div className={`${prefixCls}-range-panel`}>
-          <div className={`${prefixCls}-range-panel-left`}>
+      <div className={`${wrapperCls}-range`} style={pickerStyle}>
+        <div className={`${wrapperCls}-range-panel`}>
+          <div className={`${wrapperCls}-range-panel-left`}>
             <DatePickerApart
-              prefixCls={prefixCls}
+              wrapperCls={wrapperCls}
               mode={mode[0]}
               value={startValue}
               sectionType={sectionType}
@@ -191,9 +145,9 @@ export default class DateRangePicker extends React.Component {
               onValueChange={this.onStartValueChange}
             />
           </div>
-          <div className={`${prefixCls}-range-panel-right`}>
+          <div className={`${wrapperCls}-range-panel-right`}>
             <DatePickerApart
-              prefixCls={prefixCls}
+              wrapperCls={wrapperCls}
               mode={mode[1]}
               value={endValue}
               sectionType={sectionType}
@@ -211,7 +165,7 @@ export default class DateRangePicker extends React.Component {
           </div>
         </div>
         <DatePickerFooter
-          prefixCls={prefixCls}
+          wrapperCls={wrapperCls}
           onCancel={this.onCancel}
           onConfirm={this.onConfirm}
         />
@@ -220,11 +174,11 @@ export default class DateRangePicker extends React.Component {
   }
 }
 
-DateRangePicker.defaultProps = {
-  type: 'both',
+RangeDatePicker.defaultProps = {
   mode: ['date', 'date'],
-  defaultSelectedValue: [],
-  onValueChange: noop,
-  onChange: noop,
-  onSelect: noop,
+  value: [moment(), moment().add(1, 'months')],
+  defaultValue: null,
+  onValueChange(){},
+  onChange(){},
+  onSelect(){},
 }
