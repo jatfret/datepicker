@@ -1,0 +1,35 @@
+.#{$prefixClass}-range {
+  position: relative;
+  width: 800px;
+  font-size: 14px;
+  border: 1px solid $borderColor;
+  box-shadow: 0 1px 5px $borderColor;
+  border-radius: 4px;
+  background: #fff;
+  outline: none;
+  .#{$prefixClass}-range-panel:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+  .#{$prefixClass}-range-panel-left,
+  .#{$prefixClass}-range-panel-right {
+    width: 50%;
+  }
+  .#{$prefixClass}-range-panel-left {
+    float: left;
+    border-right: 1px solid $borderColor;
+  }
+  .#{$prefixClass}-range-panel-right {
+    float: right;
+  }
+  .#{$prefixClass}-range-caption {
+    background: $greyColor;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    border-bottom: 1px solid $borderColor;
+  }
+}

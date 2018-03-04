@@ -1,0 +1,70 @@
+@import "./common/index.scss";
+@import "components/DatePanel";
+@import "components/MonthPanel";
+@import "components/YearPanel";
+@import "components/DatePickerHeader";
+@import "components/DatePickerFooter";
+@import "./DateRangePicker";
+$prefixClass: datepicker;
+.datePicker-input {
+  width: 190px;
+  text-align: center;
+  height: 38px;
+  line-height: 38px;
+  font-size: 14px;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.#{$prefixClass}-popup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.#{$prefixClass} {
+  position: relative;
+  width: 400px;
+  font-size: 14px;
+  border: 1px solid $borderColor;
+  box-shadow: 0 1px 5px $borderColor;
+  border-radius: 4px;
+  background: #fff;
+  outline: none;
+  a {
+    color: #333;
+    text-decoration: none;
+  }
+}
+.#{$prefixClass}-header {
+  height: 60px;
+  line-height: 60px;
+  border-bottom: 1px solid $borderColor;
+  text-align: center;
+  user-select: none;
+}
+.#{$prefixClass}-body {
+  height: 270px;
+  padding: 10px 10px;
+  table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+  }
+}
+.#{$prefixClass}-footer {
+  padding: 10px;
+  height: 60px;
+  border-top: 1px solid $borderColor;
+  text-align: right;
+}
+.#{$prefixClass}-col2 {
+  float: left;
+  width: 198px;
+  &:first-of-type {
+    border-right: 1px solid $borderColor;
+  }
+}

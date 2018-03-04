@@ -1,0 +1,42 @@
+.#{$prefixClass}-adjacent-selector {
+  position: relative;
+  width: 198px;
+  margin: 0 auto;
+  .#{$prefixClass}-month-year-value {
+    display: inline-block;
+    width: 80px;
+    line-height: 1.4;
+    border-left: 1px solid $borderColor;
+    border-right: 1px solid $borderColor;
+    cursor: pointer;
+  }
+  .#{$prefixClass}-prev-btn,
+  .#{$prefixClass}-next-btn {
+    position: absolute;
+    top: 0;
+    color: #666;
+    padding: 0 5px;
+    font-size: 16px;
+    display: inline-block;
+    line-height: 60px;
+    cursor: pointer;
+  }
+  .#{$prefixClass}-disabled-btn {
+    color: $disableColor;
+    cursor: not-allowed;
+  }
+  .#{$prefixClass}-prev-btn{
+    left: 20px;
+    &:before {
+      content: '\2039';
+      font-size: 20px;
+    }
+  }
+  .#{$prefixClass}-next-btn{
+    right: 20px;
+    &:before {
+      content: '\203A';
+      font-size: 20px;
+    }
+  }
+}
