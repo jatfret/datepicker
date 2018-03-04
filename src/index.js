@@ -40,10 +40,13 @@ class Test extends React.Component {
     }
     return (
       <div className="datepicker-wrapper">
+        <p>基于 React + Moment 实现的一个时间选择器，分别支持日、周、月、年维度的单选和区间选择</p>
+        <p>源码地址：<a href="http://www.github.com/jatfret/datepicker" target="blank">www.github.com/jatfret/datepicker</a></p>
         <section className="single-picker">
-          <h2>Single Picker</h2>
+          <h3>单选</h3>
           <DatePicker {...singleProps}/>
           <div className="section-choose">
+            维度：
             <label htmlFor="day">
               <input
                 name="single-section"
@@ -80,9 +83,10 @@ class Test extends React.Component {
           </div>
         </section>
         <section className="range-picker">
-          <h2>Range Picker</h2>
+          <h3>区间选择</h3>
           <DatePicker {...rangeProps}/>
           <div className="section-choose">
+            维度：
             <label htmlFor="day-section">
               <input
                 name="range-section"
