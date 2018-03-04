@@ -1,3 +1,7 @@
+datepicker 为一款基于 React + Moment.js 的时间选择器，分别支持日、周、月、年维度的单选和区间选择。查看[demo](http://demo.jatfret.com/ "jatfret")
+
+
+## API说明
 | 参数             | 说明               | 类型              | 默认值          |
 |--------------|----------------|----------|--------------|
 | value           | 展示日期            | [moment](http://momentjs.com)|当前日期|
@@ -9,3 +13,7 @@
 | inputClassName  | 输入框的class名称    | String           | undefined        |
 | onConfrim       | 确认回调函数         | Function          | undefinded      |
 | onSelect        | 选择日期回调函数      | Function          | undefined        |
+
+## 需要安装的依赖：
+  - React
+  - Moment.js
