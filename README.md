@@ -1,4 +1,4 @@
-datepicker 为一款基于 React + Moment.js 的时间选择器，分别支持日、周、月、年维度的单选和区间选择。查看[demo](http://demo.jatfret.com/ "jatfret")
+datepicker 为一款基于 React + Moment.js 的时间选择器，分别支持日、周、月、年维度的单选和区间选择。查看[demo](http://demo.jatfret.com/datepickerDemo/index.html "jatfret")
 
 
 ## API说明
